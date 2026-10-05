@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academia M4N – iFLOW</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<div id="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand-block"><img src="assets/IFLOW_logo_transparente.png" class="iflow-logo" alt="iFLOW"><div><strong>Academia M4N</strong><span>Capacitación operativa</span></div><button class="icon-btn sidebar-close" id="sidebarClose">×</button></div>
+  <nav class="main-nav">
+    <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>Inicio</span></button>
+    <button class="nav-item" data-open-module="orientation"><span class="nav-icon">01</span><span>Orientación</span></button>
+    <button class="nav-item" data-open-module="masterdata"><span class="nav-icon">02</span><span>Datos Maestros</span></button>
+    <button class="nav-item" data-open-module="inbound"><span class="nav-icon">03</span><span>Recepción / Inbound</span></button>
+    <button class="nav-item" data-open-module="putaway"><span class="nav-icon">04</span><span>Putaway</span></button>
+    <button class="nav-item" data-open-module="inventory"><span class="nav-icon">05</span><span>Inventario</span></button>
+    <button class="nav-item" data-open-module="replenishment"><span class="nav-icon">06</span><span>Reposición</span></button>
+    <button class="nav-item" data-open-module="planning"><span class="nav-icon">07</span><span>Planning y Olas</span></button>
+    <button class="nav-item" data-open-module="picking"><span class="nav-icon">08</span><span>Picking</span></button>
+    <button class="nav-item" data-open-module="exceptions"><span class="nav-icon">09</span><span>Excepciones</span></button>
+    <button class="nav-item" data-open-module="consolidation"><span class="nav-icon">10</span><span>Consolidación</span></button>
+    <button class="nav-item" data-open-module="dispatch"><span class="nav-icon">11</span><span>Despacho / Shipping</span></button>
+    <button class="nav-item" data-open-module="counts"><span class="nav-icon">12</span><span>Inventarios y Conteos</span></button>
+    <button class="nav-item" data-open-module="returns"><span class="nav-icon">13</span><span>Devoluciones y Redespachos</span></button>
+    <button class="nav-item" data-open-module="rolesTasks"><span class="nav-icon">14</span><span>Roles y Tareas</span></button>
+    <button class="nav-item" data-open-module="integratedCase"><span class="nav-icon">15</span><span>Caso Integrador</span></button>
+    <button class="nav-item instructor-nav" data-view="instructor"><span class="nav-icon">◎</span><span>Vista Instructor</span></button>
+  </nav>
+  <div class="sidebar-section" id="moduleNavWrap" style="display:none"><div class="sidebar-label">ETAPAS DEL MÓDULO</div><div id="moduleNav"></div></div>
+  <div class="sidebar-bottom"><div class="tech-brand"><span>Plataforma tecnológica</span><img src="assets/MADE4NET_logo_transparente.png" class="made4net-logo" alt="Made4Net"></div><small>Uso interno – iFLOW</small></div>
+</aside>
+<div class="page">
+<header class="mobile-topbar"><button class="icon-btn" id="sidebarOpen">☰</button><img src="assets/IFLOW_logo_transparente.png" class="mobile-logo" alt="iFLOW"><span>Academia M4N</span></header>
+<main>
+<section class="view active" id="homeView">
+<div class="home-hero"><div><div class="eyebrow">ACADEMIA M4N – iFLOW</div><h1>Aprender M4N operando M4N</h1><p>La plataforma acompaña la práctica real en M4N. Cada módulo exige observar, interpretar, operar, verificar y decidir.</p></div>
+<div class="hero-summary"><div><span>Ruta</span><strong>15 etapas</strong></div><div><span>Módulos disponibles</span><strong id="availableModulesText">Calculando…</strong></div><div><span>Metodología</span><strong>Guiado → Autónomo</strong></div></div></div>
+<section class="home-section"><div class="section-title-row"><div><span class="eyebrow">RUTA DE APRENDIZAJE</span><h2>Programa completo</h2></div></div><div id="learningPath" class="learning-path"></div></section>
+<section class="home-section"><div class="section-title-row"><div><span class="eyebrow">MÓDULOS</span><h2>Continuá tu capacitación</h2></div></div><div id="moduleCards" class="module-cards"></div></section>
+</section>
+<section class="view" id="moduleView"><div id="moduleRoot"></div></section>
+<section class="view" id="instructorView"><div class="module-shell"><div class="eyebrow">VISTA INSTRUCTOR</div><h1 id="instrTitle">Seguimiento</h1><div id="instructorRoot"></div></div></section>
+</main></div></div>
+<script src="config.js"></script><script src="modules.js"></script><script src="app.js"></script>
+</body></html>
