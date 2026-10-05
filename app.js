@@ -842,7 +842,8 @@ function bindStageActions(){
     save();alert(state.milestones.checkpoint?"Checkpoint validado.":"Todavía hay respuestas pendientes o incorrectas.");
   });
   document.querySelector("[data-scenario]")?.addEventListener("click",()=>{
-    const id=currentModule==="inbound"?"alternative_receipt_status":
+    const id=currentModule==="orientation"?"q_scenario":
+             currentModule==="inbound"?"alternative_receipt_status":
              currentModule==="putaway"?"put_scenario":
              currentModule==="inventory"?"inv_scenario":
              currentModule==="replenishment"?"rep_scenario":
@@ -862,7 +863,9 @@ function bindStageActions(){
     }
     if(!id){state.milestones.scenario=false;save();alert("Módulo todavía no implementado.");return;}
     state.milestones.scenario=!!state.quizzes[id]?.correct;
-    save();alert(state.milestones.scenario?"Escenario validado.":"Resolvé correctamente el escenario antes de completarlo.");
+    save();
+    if(currentModule==="orientation")syncInputs();
+    alert(state.milestones.scenario?"Escenario validado.":"Resolvé correctamente el escenario antes de completarlo.");
   });
   document.getElementById("challengeDone")?.addEventListener("change",e=>{
     const notes=document.getElementById("challengeNotes")?.value.trim()||"";
@@ -910,6 +913,10 @@ function syncInputs(){
   document.querySelectorAll("[data-generated-config]").forEach(i=>i.value=state.config[i.dataset.generatedConfig]||"");
   document.querySelectorAll("[data-task-complete]").forEach(i=>i.checked=!!state.tasks[i.dataset.taskComplete]);
   document.querySelectorAll("[data-milestone]").forEach(b=>{if(state.milestones[b.dataset.milestone]){b.classList.add("done");b.textContent="Completado ✓";}});
+  if(currentModule==="orientation"&&state.milestones.scenario){
+    const scenarioBtn=document.querySelector("[data-scenario]");
+    if(scenarioBtn){scenarioBtn.classList.add("done");scenarioBtn.textContent="Completado ✓";}
+  }
   document.querySelectorAll("[data-quiz]").forEach(box=>{
     const id=box.dataset.quiz,q=state.quizzes[id];
     if(!q)return;
