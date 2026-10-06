@@ -195,9 +195,17 @@ function activeModuleIds(){
 function moduleSummary(id){
   const oldM=currentModule, oldS=state;
   currentModule=id; state=loadState(id);
-  const result={progress:calcProgress(),status:status()};
+  const progress=calcProgress(), moduleStatus=status();
+  const result={progress,status:moduleStatus,approval:moduleStatus==="Completado"?approval():""};
   currentModule=oldM; state=oldS;
   return result;
+}
+function homeApprovalLabel(value){
+  return value==="Aprobado autónomamente"?"Autónomo":value==="Aprobado con ayuda"?"Con ayuda":value==="Requiere refuerzo"?"Requiere refuerzo":"";
+}
+function homeStatusText(summary){
+  const classification=summary.progress===100?homeApprovalLabel(summary.approval):"";
+  return classification?`${summary.status} · ${classification}`:summary.status;
 }
 function renderHome(){
   const ids=activeModuleIds();
@@ -213,17 +221,19 @@ function renderHome(){
     if(id){
       const s=moduleSummary(id);
       stateClass=s.status==="Completado"?"completed":s.status==="En progreso"?"progress":"current";
-      stateText=s.status==="No iniciado"?"Disponible":`${s.status} · ${s.progress}%`;
+      stateText=homeStatusText(s);
+      return `<div class="path-item ${stateClass}"><span class="route-index">Ruta ${i+1} de 15</span><strong>${r[1]}</strong><div class="home-progress-summary"><span class="home-progress-percent">${s.progress}%</span><small>${stateText}</small></div><div class="home-progress-bar" role="progressbar" aria-label="Progreso de ${r[1]}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.progress}"><span style="width:${s.progress}%"></span></div></div>`;
     }
-    return `<div class="path-item ${stateClass}"><span class="route-index">Ruta ${i+1} de 15</span><strong>${r[1]}</strong><small>${stateText}</small></div>`;
+    return `<div class="path-item ${stateClass}"><span class="route-index">Ruta ${i+1} de 15</span><strong>${r[1]}</strong><div class="home-progress-summary"><span class="home-progress-percent">0%</span><small>${stateText}</small></div><div class="home-progress-bar" aria-hidden="true"><span style="width:0%"></span></div></div>`;
   }).join("");
 
   document.getElementById("moduleCards").innerHTML=ids.map(id=>{
     const m=MODS[id],s=moduleSummary(id);
     return `<article class="module-card available-card">
       <div class="module-card-head"><span class="module-card-num">Módulo ${m.number}</span>
-      <span class="status-chip">${s.status}${s.status!=="No iniciado"?" · "+s.progress+"%":""}</span></div>
+      <span class="status-chip">${homeStatusText(s)}</span></div>
       <h3>${m.title}</h3><p>${m.competency}</p>
+      <div class="module-card-progress"><div class="home-progress-summary"><span class="home-progress-percent">${s.progress}%</span><small>${homeStatusText(s)}</small></div><div class="home-progress-bar" role="progressbar" aria-label="Progreso de ${m.title}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${s.progress}"><span style="width:${s.progress}%"></span></div></div>
       <div class="module-meta"><span>Nivel <strong>${m.level}</strong></span><span>Duración <strong>${m.duration}</strong></span></div>
       <button class="primary" data-open-module="${id}">${s.status==="No iniciado"?"Comenzar":"Continuar"}</button>
     </article>`;
@@ -1075,7 +1085,11 @@ function renderInstructor(){
       ${Object.entries(s.hints||{}).length?Object.entries(s.hints).map(([hid,h])=>`<div class="data-row"><span>${hid}</span><strong>${h.level||"pista"} · ${h.count||0} consulta(s)</strong></div>`).join(""):"<p>Sin ayudas registradas.</p>"}</div>
       <div class="stage-actions"><button class="secondary" data-reset="${id}">Reset del módulo</button><button class="primary" data-open-module="${id}">Abrir módulo</button></div>
     </section>`;
-  }).join("");
+  }).join("")+`<section class="academy-reset-zone" aria-labelledby="academyResetTitle">
+    <div><span class="eyebrow">USO COMPARTIDO DE ESTA PC</span><h2 id="academyResetTitle">Reiniciar progreso local</h2><p>Elimina únicamente el avance de Academia M4N guardado en este navegador para que otra persona pueda comenzar desde cero.</p></div>
+    <button class="danger-button academy-reset-button" type="button" data-reset-academy>Reiniciar progreso de esta PC</button>
+  </section>`;
+  document.querySelector("[data-reset-academy]")?.addEventListener("click",openAcademyResetConfirmation);
   document.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>{
     if(confirm("¿Reiniciar progreso y configuración de este módulo?")){
       localStorage.removeItem(key(b.dataset.reset));renderInstructor();renderHome();
@@ -1083,6 +1097,42 @@ function renderInstructor(){
   });
   bindOpeners();
 }
+function openAcademyResetConfirmation(){
+  let modal=document.getElementById("academyResetModal");
+  if(!modal){
+    modal=document.createElement("div");
+    modal.id="academyResetModal";
+    modal.className="academy-reset-modal";
+    modal.setAttribute("aria-hidden","true");
+    modal.innerHTML=`<div class="academy-reset-backdrop" data-cancel-academy-reset></div>
+      <div class="academy-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="academyResetModalTitle" aria-describedby="academyResetModalText">
+        <h2 id="academyResetModalTitle">Reiniciar progreso de esta PC</h2>
+        <p id="academyResetModalText">Se eliminará todo el avance guardado localmente en este navegador para los módulos M0–M14.</p>
+        <p>Esta acción permitirá que otra persona utilice esta PC y comience la capacitación desde cero.</p>
+        <p><strong>Esta acción no se puede deshacer.</strong></p>
+        <div class="academy-reset-actions"><button class="secondary" type="button" data-cancel-academy-reset>Cancelar</button><button class="danger-button" type="button" data-confirm-academy-reset>Reiniciar progreso</button></div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.querySelectorAll("[data-cancel-academy-reset]").forEach(b=>b.addEventListener("click",closeAcademyResetConfirmation));
+    modal.querySelector("[data-confirm-academy-reset]").addEventListener("click",resetAcademyProgress);
+  }
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+  modal.querySelector("[data-cancel-academy-reset]")?.focus();
+}
+function closeAcademyResetConfirmation(){
+  const modal=document.getElementById("academyResetModal");
+  if(!modal)return;
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden","true");
+}
+function resetAcademyProgress(){
+  Object.keys(localStorage)
+    .filter(k=>k.startsWith("iflow_m4n_academy_"))
+    .forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}
+
 function humanQuiz(id){
   return ({
     q_interface:"Interfaz para ejecución en piso",q_cp:"Checkpoint principal",q_obj:"Objeto Tarea",q_pick:"Parámetros de reposición",q_vu:"VU IN",
