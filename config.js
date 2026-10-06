@@ -1,7 +1,7 @@
 window.TRAINING_CONFIG = {
   app: {
     name: "Academia M4N – iFLOW",
-    version: "2.8-tanda7-final",
+    version: "2.9-visual",
     manual: { title: "Manual Operativo M4N v1.5", url: "" }
   },
   modules: {

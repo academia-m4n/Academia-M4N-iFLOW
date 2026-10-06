@@ -1,7 +1,8 @@
 # Academia M4N – iFLOW · Ruta M0–M14 completa
 
 ## Versión vigente
-- **Versión:** `2.8-tanda7-final`
+- **Edición visual:** capturas reales seleccionadas del Manual Operativo M4N v1.5, sin cambios funcionales ni pedagógicos.
+- **Versión:** `2.9-visual`
 - **Fuente funcional:** Manual Operativo M4N v1.5 y contenidos funcionales ya aprobados en M0–M13.
 - **Arquitectura:** aprobada y congelada.
 - **Persistencia:** LocalStorage por módulo.
@@ -213,3 +214,11 @@ No se incorporaron esos procedimientos como si estuvieran resueltos.
 2. Mantener intacta la estructura de carpetas.
 3. Abrir `index.html` en un navegador compatible.
 4. La información del alumno se guarda localmente mediante LocalStorage del navegador.
+
+## v2.9 Visual
+- Se integraron 38 referencias visuales seleccionadas del Manual Operativo M4N v1.5.
+- Las capturas se muestran únicamente en Context o Práctica guiada según criterio pedagógico.
+- M4 no incorpora captura porque el Manual no contiene una evidencia operativa específica de LO/AH con valor suficiente; la placa de título fue descartada.
+- M14 permanece sin capturas para preservar autonomía.
+- Las imágenes admiten ampliación por click y diseño responsive sin librerías externas.
+- No se modificaron módulos, preguntas, respuestas, pesos, LocalStorage, Vista Instructor ni criterios de aprobación.

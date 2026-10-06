@@ -3,6 +3,104 @@ const CFG=window.TRAINING_CONFIG, MODS=window.M4N_MODULES;
 let currentModule=null, currentStage="overview", state=null;
 const key=id=>`iflow_m4n_academy_${id}_v1`;
 
+// v2.9 Visual: referencias de pantalla tomadas exclusivamente del Manual Operativo M4N v1.5.
+// Este bloque no modifica lógica pedagógica, evaluación, progreso ni persistencia.
+const VISUAL_GUIDES={
+  orientation:{context:[
+    {src:"assets/screens/orientation/m0_rdt_login.png",title:"Acceso al Capturador / RDT",caption:"Referencia visual para reconocer el acceso operativo.",look:["Usuario y credenciales","Warehouse / ubicación de trabajo","Acceso al entorno correcto"]},
+    {src:"assets/screens/orientation/m0_rdt_menu.png",title:"Menú principal del RDT",caption:"Las opciones visibles dependen del rol, Warehouse y área habilitada.",look:["Familias de procesos","Obtener Tareas","Diferencia entre consulta y ejecución"]}
+  ]},
+  masterdata:{guided:[
+    {src:"assets/screens/masterdata/m1_sku_parameters.png",title:"Parámetros operativos del SKU",caption:"Usá esta pantalla para reconocer dónde consultar configuración sin modificarla.",look:["SKU Class","Estado / UDM","Parámetros operativos"]},
+    {src:"assets/screens/masterdata/m1_uom_hierarchy.png",title:"Jerarquía de UDM",caption:"La relación entre presentaciones condiciona validaciones posteriores.",look:["UDM","Unidad inferior","Cantidad de UDM","EAN / DUN"]},
+    {src:"assets/screens/masterdata/m1_picking_location.png",title:"Ubicación de Picking",caption:"Referencia de la relación SKU ↔ Picking y parámetros de reposición.",look:["Ubicación","NORMALMINLEVEL","HOTMAXLEVEL"]}
+  ]},
+  inbound:{guided:[
+    {src:"assets/screens/inbound/m2_receipt_creation.png",title:"Creación del Recibo",caption:"El Recibo se crea desde la Orden de Entrada antes de registrar los LPN.",look:["Orden de Entrada","Acción de creación","Recibo asociado"]},
+    {src:"assets/screens/inbound/m2_lpn_fields.png",title:"Campos operativos del LPN",caption:"Antes de confirmar, contrastá la pantalla con la mercadería y documentación física.",look:["SKU y UDM","Cantidad","Lote y vencimiento","Estado y ubicación","Número de LPN"]},
+    {src:"assets/screens/inbound/m2_receipt_close.png",title:"Cierre del Recibo",caption:"El cierre corresponde después de validar los LPN generados.",look:["Recibo correcto","LPN registrados","Acción de cierre"]}
+  ]},
+  putaway:{guided:[
+    {src:"assets/screens/putaway/m3_reacomodar_lpn.png",title:"Reacomodar LPN",caption:"Punto de entrada operativo para iniciar el Putaway desde RDT.",look:["Proceso Recepción","Reacomodar LPN"]},
+    {src:"assets/screens/putaway/m3_lpn_suggested_location.png",title:"LPN y ubicación sugerida",caption:"M4N calcula el destino según la estrategia configurada.",look:["LPN correcto","Ubicación sugerida","Secuencia antes de mover"]},
+    {src:"assets/screens/putaway/m3_confirm_destination.png",title:"Confirmación de destino",caption:"La confirmación debe coincidir con la posición física donde quedó el LPN.",look:["Ubicación destino","Lectura física de la etiqueta","Confirmación final"]}
+  ]},
+  replenishment:{guided:[
+    {src:"assets/screens/replenishment/m5_obtener_tareas.png",title:"Obtener Tareas",caption:"La reposición operativa comienza con el trabajo asignado por M4N.",look:["Obtener Tareas","Rol operativo","Proceso Reabastecer"]},
+    {src:"assets/screens/replenishment/m5_fullrepl_task.png",title:"Tarea de Reposición",caption:"Ejemplo real de una tarea FULLREPL. La imagen no agrega reglas funcionales nuevas.",look:["ID de tarea","Tipo de tarea","SKU / referencia"]},
+    {src:"assets/screens/replenishment/m5_confirm_destination.png",title:"Destino de Reposición",caption:"Antes de confirmar, verificá el LPN origen y la ubicación de Picking destino indicada.",look:["LPN origen","Ubicación destino","Confirmación física"]}
+  ]},
+  planning:{guided:[
+    {src:"assets/screens/planning/m6_wave_staging.png",title:"Ola y Staging",caption:"Referencia de la Ola antes del Planning cuando el flujo requiere Staging.",look:["Ola seleccionada","Órdenes incluidas","Staging"]},
+    {src:"assets/screens/planning/m6_staging_selection.png",title:"Selección de Staging",caption:"El Staging debe quedar definido antes de Planear cuando corresponda.",look:["Staging elegido","Órdenes afectadas","Área asociada"]},
+    {src:"assets/screens/planning/m6_wave_planning.png",title:"Resultado de Planning",caption:"La pantalla de WS permite revisar asignación y excepciones antes de Liberar.",look:["Inventario asignado","Líneas con excepción","Resultado antes de Liberar"]}
+  ]},
+  picking:{guided:[
+    {src:"assets/screens/picking/m7_picking_standard.png",title:"Picking estándar",caption:"Leé la pantalla completa antes de confirmar el movimiento.",look:["SKU","UDM / presentación","Ubicación origen","Cantidad","Acción disponible"]},
+    {src:"assets/screens/picking/m7_partial_picking.png",title:"Picking parcial",caption:"La pantalla indica qué preparar y desde dónde.",look:["SKU","UDM","Ubicación","Cantidad a pickear"]},
+    {src:"assets/screens/picking/m7_full_pick.png",title:"Full Pick",caption:"En Full Pick se confirma el LPN completo indicado por M4N.",look:["LPN","SKU","Cantidad","Ubicación origen"]},
+    {src:"assets/screens/picking/m7_staging_delivery.png",title:"Entrega a Staging",caption:"El Picking termina cuando el contenedor queda físicamente entregado y confirmado en el Staging indicado.",look:["Contenedor / LPN","Staging","Confirmación de ubicación"]}
+  ]},
+  exceptions:{guided:[
+    {src:"assets/screens/exceptions/m8_ws_investigation.png",title:"WS como evidencia",caption:"Usá la Ola para observar el resultado del Planning antes de decidir una corrección.",look:["Línea afectada","Asignación","Excepción visible","Evidencia antes de corregir"]}
+  ]},
+  consolidation:{guided:[
+    {src:"assets/screens/consolidation/m9_consolidation_menu.png",title:"Acceso a Consolidación",caption:"Referencia del menú operativo en RDT.",look:["Picking","Consolidación"]},
+    {src:"assets/screens/consolidation/m9_consolidation_screen.png",title:"Pantalla de Consolidación",caption:"Identificá origen y destino antes de ejecutar Consolidate.",look:["De contenedor","A contenedor","LPN"]},
+    {src:"assets/screens/consolidation/m9_destination_container.png",title:"Destino informado por M4N",caption:"El destino debe validarse; no se inventa una relación alternativa.",look:["Contenedor origen","Contenedor destino","Relación resultante"]}
+  ]},
+  dispatch:{guided:[
+    {src:"assets/screens/dispatch/m10_shipments.png",title:"Shipments / Envíos",caption:"Referencia para reconocer el Shipment y su contexto antes de cargar.",look:["Shipment","Dock","Estado"]},
+    {src:"assets/screens/dispatch/m10_loading_dashboard.png",title:"Dashboard de Carga",caption:"Control visual del avance por Envío, pedidos y LPN / contenedores.",look:["Envío","Pendientes","Avance de carga"]},
+    {src:"assets/screens/dispatch/m10_truck_loading.png",title:"Carga Camión",caption:"Cada elemento debe validarse contra el Shipment antes de cargarlo físicamente.",look:["Dock","LPN / contenedor","Validación antes de continuar"]}
+  ]},
+  counts:{guided:[
+    {src:"assets/screens/counts/m11_count_location_menu.png",title:"Conteo de Ubicación",caption:"Acceso al conteo operativo desde el Capturador.",look:["Menú Conteo","Conteo de ubicación"]},
+    {src:"assets/screens/counts/m11_count_capture.png",title:"Captura del conteo",caption:"El conteo debe reflejar todo lo que existe físicamente, no lo que el sistema espera.",look:["SKU / UDM","Cantidad física","Lote / vencimiento cuando aplique","Fin Conteo solo al completar"]},
+    {src:"assets/screens/counts/m11_inventory_adjustment.png",title:"Ajuste de Inventario",caption:"Contar no equivale a ajustar. Esta pantalla corresponde a una etapa posterior y autorizada.",look:["Razón de Ajuste","Notas","Datos a corregir","Trazabilidad"]}
+  ]},
+  returns:{guided:[
+    {src:"assets/screens/returns/m12_return_to_stock.png",title:"Devolución que vuelve a stock",caption:"La devolución requiere definición del cliente y validación física antes de reincorporarse.",look:["Orden de Entrada","Recepción","Ubicación de devolución"]},
+    {src:"assets/screens/returns/m12_return_received_action.png",title:"Registrar Devolución recibida",caption:"Para redespacho, esta acción registra la recepción pero no habilita por sí sola el reruteo.",look:["Orden de Rechazo Total","Devolución recibida","Acción aplicada"]},
+    {src:"assets/screens/returns/m12_return_closed.png",title:"Devolución recibida y Orden cerrada",caption:"El reruteo depende de que la orden quede cerrada según el proceso documentado.",look:["Devolución recibida = Sí","Orden cerrada = Sí"]}
+  ]},
+  rolesTasks:{guided:[
+    {src:"assets/screens/rolesTasks/m13_task_assignment_reference.png",title:"Referencia de asignación manual",caption:"La asignación manual es una intervención de Supervisor, no el mecanismo normal de distribución.",look:["Tarea","Usuario","Prioridad"]},
+    {src:"assets/screens/rolesTasks/m13_tasks_ts.png",title:"TS / Tasks",caption:"TS permite investigar por qué una tarea está disponible, asignada o detenida.",look:["Tipo y estado","Usuario","Prioridad","Propietario","Picklist / SKU"]},
+    {src:"assets/screens/rolesTasks/m13_cancel_task.png",title:"Cancelar tarea",caption:"Cancelar actúa sobre esa instancia de tarea y no necesariamente elimina la necesidad origen.",look:["Tarea seleccionada","Acción Cancelar tarea"]},
+    {src:"assets/screens/rolesTasks/m13_task_canceled.png",title:"Tarea CANCELED",caption:"Verificá el estado y que la asignación al usuario haya sido liberada.",look:["Estado CANCELED","Usuario sin asignación","Proceso origen"]}
+  ]}
+};
+
+function visualGuideHTML(items){
+  if(!items||!items.length)return "";
+  return `<section class="visual-guide" data-visual-guide><div class="visual-guide-head"><span class="eyebrow">REFERENCIA VISUAL</span><h3>Reconocé la pantalla antes de operar</h3><p>Capturas reales del Manual Operativo M4N v1.5. Hacé click para ampliar.</p></div><div class="visual-grid">${items.map((v,i)=>`<figure class="visual-card"><button class="visual-image-btn" type="button" data-visual-src="${v.src}" data-visual-title="${v.title}"><img src="${v.src}" alt="${v.title}" loading="lazy"></button><figcaption><strong>${v.title}</strong><p>${v.caption}</p>${v.look?.length?`<div class="what-look"><span>Qué mirar</span><ul>${v.look.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}</figcaption></figure>`).join("")}</div></section>`;
+}
+function ensureVisualModal(){
+  let modal=document.getElementById("visualModal");
+  if(modal)return modal;
+  modal=document.createElement("div");modal.id="visualModal";modal.className="visual-modal";modal.setAttribute("aria-hidden","true");
+  modal.innerHTML=`<div class="visual-modal-backdrop" data-close-visual></div><div class="visual-modal-dialog" role="dialog" aria-modal="true"><div class="visual-modal-bar"><strong id="visualModalTitle"></strong><button type="button" class="visual-modal-close" data-close-visual aria-label="Cerrar">×</button></div><img id="visualModalImage" alt=""></div>`;
+  document.body.appendChild(modal);
+  modal.querySelectorAll("[data-close-visual]").forEach(x=>x.onclick=()=>{modal.classList.remove("show");modal.setAttribute("aria-hidden","true");});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("show")){modal.classList.remove("show");modal.setAttribute("aria-hidden","true");}});
+  return modal;
+}
+function injectVisualGuide(stageId){
+  const section=document.querySelector(`.module-stage[data-stage="${stageId}"]`);
+  const items=VISUAL_GUIDES[currentModule]?.[stageId];
+  if(!section||!items?.length||section.querySelector("[data-visual-guide]"))return;
+  const head=section.querySelector(".stage-header");
+  if(!head)return;
+  head.insertAdjacentHTML("afterend",visualGuideHTML(items));
+  section.querySelectorAll("[data-visual-src]").forEach(btn=>btn.onclick=()=>{
+    const modal=ensureVisualModal(),img=modal.querySelector("#visualModalImage"),title=modal.querySelector("#visualModalTitle");
+    img.src=btn.dataset.visualSrc;img.alt=btn.dataset.visualTitle||"Captura M4N";title.textContent=btn.dataset.visualTitle||"Captura M4N";
+    modal.classList.add("show");modal.setAttribute("aria-hidden","false");
+  });
+}
+
+
 const defaultState=id=>({
   started:false,
   currentStage:"overview",
@@ -936,6 +1034,7 @@ function syncInputs(){
   updateInboundGuided();
 }
 function showStage(id){
+  injectVisualGuide(id);
   currentStage=id;state.currentStage=id;state.visited[id]=true;
   document.querySelectorAll(".module-stage").forEach(s=>s.classList.toggle("active",s.dataset.stage===id));
   document.querySelectorAll("[data-stage-nav]").forEach(b=>b.classList.toggle("active",b.dataset.stageNav===id));

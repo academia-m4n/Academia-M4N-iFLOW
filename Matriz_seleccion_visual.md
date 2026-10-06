@@ -1,0 +1,82 @@
+# Matriz de selección visual – Academia M4N iFLOW v2.9 Visual
+
+Se analizaron las capturas embebidas en el Manual Operativo M4N v1.5. La selección prioriza reconocimiento de pantalla, lectura de campos, secuencia y validación. Las capturas no seleccionadas permanecen fuera de la Academia.
+
+| Módulo | Etapa | Captura | Qué muestra | Valor | Usar |
+|---|---|---|---|---|---|
+| M0 / General | — | image1.png | MANUAL OPERATIVO M4N | BAJO | NO |
+| M0 / General | — | image2.png | Este manual consolida el flujo operativo general. Algunos procesos, reportes, ubicaciones, políticas y pantallas pueden variar por Centro de Distribución, cliente o configuración. Ante una diferencia, prevalece la definición operativa vigente del CD. | BAJO | NO |
+| M0 | Context | image3.png | Figura 1.1 – Pantalla de acceso al Capturador / RDT. | MEDIO | SÍ |
+| M0 | Context | image4.png | Figura 1.2 – Menú principal del Capturador. Las opciones dependen del rol del usuario. | MEDIO | SÍ |
+| M0 / General | — | image5.png | Figura 3.1 – Ejemplo de menú Master Data / Datos Maestros en SCExpert. | MEDIO | NO |
+| M1 | — | image6.png | Figura 4.1 – Alta inicial de un SKU: campos obligatorios antes del primer guardado. | MEDIO | NO |
+| M1 | — | image7.png | Figura 4.2 – SKU creado: habilitación de pestañas y parámetros generales. | MEDIO | NO |
+| M1 | Guided | image8.png | Figura 4.3 – Edición de parámetros operativos del SKU. | ALTO | SÍ |
+| M1 | Guided | image9.png | Figura 4.4 – Alta de una UDM y relación con su unidad de medida inferior. | ALTO | SÍ |
+| M1 | — | image10.png | Figura 4.5 – Parámetros VU IN y VU OUT en la pestaña General. | MEDIO | NO |
+| M1 | — | image11.png | Figura 4.6 – Ejemplo de SKU Class y parámetros de inventario. | MEDIO | NO |
+| M1 | Guided | image12.png | Figura 4.7 – Ubicación de Picking y parámetros de reposición asociados al SKU. | ALTO | SÍ |
+| M2 | Guided | image13.png | Figura 6.1 – Creación manual del Recibo desde la Orden de Entrada. | ALTO | SÍ |
+| M2 | — | image14.png | Figura 6.2 – Identificación del Recibo y la línea en Crear LPN. | MEDIO | NO |
+| M2 | Guided | image15.png | Figura 6.3 – Campos operativos de recepción y creación del LPN. | ALTO | SÍ |
+| M2 | Guided | image16.png | Figura 6.4 – Cierre del Recibo una vez finalizada la recepción. | ALTO | SÍ |
+| M2 | — | image17.png | Figura 6.5 – Cierre de la Orden de Entrada. | MEDIO | NO |
+| M2 | — | image18.png | Figura 6.6 – Referencia visual del flujo de Recepción en el material operativo vigente. | MEDIO | NO |
+| M3 | Guided | image19.png | Figura 7.1 – Acceso a Reacomodar LPN desde Recepción. | ALTO | SÍ |
+| M3 | Guided | image20.png | Figura 7.2 – Identificación del LPN para cálculo de ubicación sugerida. | ALTO | SÍ |
+| M3 | Guided | image21.png | Figura 7.3 – Confirmación de la ubicación destino en el proceso de Acomodo. | ALTO | SÍ |
+| M3 | — | image22.png | Figura 7.4 – Referencia del proceso de Guardado / Putaway. | MEDIO | NO |
+| M4 | — | image23.png | 8.1 Cómo interpretar el Inventario | BAJO | NO |
+| M5 | — | image24.png | Figura 9.1 – Referencia de planificación/ejecución de Reposición. | MEDIO | NO |
+| M5 | Guided | image25.png | Figura 9.2 – Inicio desde RDT: Obtener Tareas para asignación automática. | ALTO | SÍ |
+| M5 | Guided | image26.png | Figura 9.3 – M4N asigna una tarea FULLREPL al Maquinista. | ALTO | SÍ |
+| M5 | — | image27.png | Figura 9.4 – Validación del LPN origen de la reposición. | MEDIO | NO |
+| M5 | Guided | image28.png | Figura 9.5 – Confirmación física de la ubicación destino. | ALTO | SÍ |
+| M5 | — | image29.png | Figura 9.6 – Fin de reposición cuando no quedan tareas disponibles. | MEDIO | NO |
+| M6 | Guided | image30.png | Figura 10.1 – Asignación de Staging desde los detalles de la Ola. | ALTO | SÍ |
+| M6 | Guided | image31.png | Figura 10.2 – Selección del Staging para las órdenes de la Ola antes del Planning. | ALTO | SÍ |
+| M6 / M8 | Guided | image32.png | Figura 10.3 – Validación del área de muelle asociada al Staging. | ALTO | SÍ |
+| M7 | Guided | image33.png | Figura 11.1 – Pantalla de Picking parcial: SKU, UDM, ubicación, cantidad y acciones. | ALTO | SÍ |
+| M7 | — | image34.png | Figura 11.2 – Identificación del Contenedor o LPN que se desea mover. | MEDIO | NO |
+| M7 | — | image35.png | Figura 11.3 – Confirmación manual de una nueva ubicación de Staging. | MEDIO | NO |
+| M7 | — | image36.png | Figura 11.4 – Tarea de Picking Paralelo asignada por Obtener Tareas. | MEDIO | NO |
+| M7 | — | image37.png | Figura 11.5 – Preparar Picklist e identificación del contenedor de preparación. | MEDIO | NO |
+| M7 | Guided | image38.png | Figura 11.6 – Picking parcial: SKU, UDM, ubicación y cantidad a pickear. | ALTO | SÍ |
+| M7 | — | image39.png | Figura 11.7 – Impresión de etiqueta del contenedor y destino de Staging. | MEDIO | NO |
+| M7 | Guided | image40.png | Figura 11.8 – Full Pick: M4N indica el LPN completo, SKU, cantidad y ubicación origen. | ALTO | SÍ |
+| M7 | — | image41.png | Figura 11.9 – Impresión de etiqueta para Full Pick. | MEDIO | NO |
+| M7 | Guided | image42.png | Figura 11.10 – Entrega del pallet/contenedor y confirmación de ubicación de Staging. | ALTO | SÍ |
+| M9 | Guided | image43.png | Figura 14.1 – Acceso a Consolidación desde el menú de Picking. | ALTO | SÍ |
+| M9 | Guided | image44.png | Figura 14.2 – Pantalla de Consolidación: contenedor origen, destino y LPN. | ALTO | SÍ |
+| M9 | Guided | image45.png | Figura 14.3 – Contenedor destino informado por M4N. | ALTO | SÍ |
+| M10 | Guided | image46.png | Figura 15.1 – Acceso a Shipments / Envíos en SCExpert. | ALTO | SÍ |
+| M10 | — | image47.png | Figura 15.2 – Acceso al Tablero de Carga (DDC). | MEDIO | NO |
+| M10 | Guided | image48.png | Figura 15.3 – Dashboard de Carga: seguimiento operativo en vivo. | ALTO | SÍ |
+| M10 | Guided | image49.png | Figura 15.4 – Referencia de inicio de Carga Camión desde el Capturador. | ALTO | SÍ |
+| M11 | Guided | image50.png | Figura 16.1 – Acceso a Conteo de Ubicación en el Capturador. | ALTO | SÍ |
+| M11 | Guided | image51.png | Figura 16.2 – Ejemplo de captura de UDM, cantidad y atributos durante el conteo. | ALTO | SÍ |
+| M11 | Guided | image52.png | Figura 16.3 – Pantalla de Ajustes de Inventario (IJ). | ALTO | SÍ |
+| Fuera de alcance: Roturas | — | image53.png | Figura 17.1 – Acceso a Mover LPN desde Recepción. | MEDIO | NO |
+| Fuera de alcance: Roturas | — | image54.png | Figura 17.2 – LPN origen: cantidad y ubicación antes de registrar la rotura. | MEDIO | NO |
+| Fuera de alcance: Roturas | — | image55.png | Figura 17.3 – Rotura parcial: estado Rotura, ubicación ROTURA y cantidad afectada. | MEDIO | NO |
+| Fuera de alcance: Roturas | — | image56.png | Figura 17.4 – Verificación en LO del inventario segregado en ROTURA. | MEDIO | NO |
+| M12 | Guided | image57.png | Figura 18.1 – Referencia de Devoluciones que vuelven a stock. | ALTO | SÍ |
+| M12 | — | image58.png | Figura 18.2 – Confirmación de Devolución recibida para redespacho. | MEDIO | NO |
+| M12 | — | image59.png | Figura 18.3 – Búsqueda de órdenes de Rechazo Total pendientes de devolución recibida. | MEDIO | NO |
+| M12 | Guided | image60.png | Figura 18.4 – Selección de la orden y acción para registrar Devolución recibida. | ALTO | SÍ |
+| M12 | — | image61.png | Figura 18.5 – Devolución recibida confirmada en Sí. | MEDIO | NO |
+| M12 | Guided | image62.png | Figura 18.6 – Orden de rechazo con Devolución recibida y Orden cerrada en Sí. | ALTO | SÍ |
+| M13 | — | image63.png | Figura 19.1 – Policy ID - Roles activos informados para la operación. | MEDIO | NO |
+| M13 | Guided | image64.png | Figura 19.2 – Referencia de asignación manual de tareas y prioridad. | ALTO | SÍ |
+| M13 | Guided | image65.png | Figura 19.3 – TS: tareas disponibles y tareas asignadas manualmente. | ALTO | SÍ |
+| M13 | — | image66.png | Figura 19.4 – Asignación manual de una tarea a usuario y prioridad. | MEDIO | NO |
+| M13 | Guided | image67.png | Figura 19.5 – Acción Cancelar tarea. | ALTO | SÍ |
+| M13 | Guided | image68.png | Figura 19.6 – Tarea en estado CANCELED y sin usuario asignado. | ALTO | SÍ |
+
+## Criterios relevantes
+
+- M4: no se incorporó imagen porque la única captura específica es una placa de título y no muestra LO/AH.
+- M8: se reutiliza una captura real de WS como evidencia de investigación; no se agregan imágenes que revelen respuestas de escenarios autónomos.
+- M14: no incorpora capturas, preservando autonomía y evitando revelar la causa del caso.
+- Capture Weight: no se incorporan capturas como procedimiento operativo definitivo.
+- Las imágenes de Roturas se analizaron pero quedaron fuera de esta versión visual por no formar parte de los módulos priorizados.
