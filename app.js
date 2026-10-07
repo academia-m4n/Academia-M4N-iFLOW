@@ -134,11 +134,22 @@ function save(){
   localStorage.setItem(key(currentModule),JSON.stringify(state));
   renderProgress();
 }
+function syncSidebarActive(view){
+  document.querySelectorAll(".main-nav .nav-item").forEach(item=>item.classList.remove("active"));
+  if(view==="module" && currentModule){
+    const moduleItem=document.querySelector(`.main-nav [data-open-module="${currentModule}"]`);
+    if(moduleItem)moduleItem.classList.add("active");
+    return;
+  }
+  const viewItem=document.querySelector(`.main-nav [data-view="${view}"]`);
+  if(viewItem)viewItem.classList.add("active");
+}
 function showView(v){
   document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
   document.getElementById(v+"View").classList.add("active");
   document.getElementById("moduleNavWrap").style.display=v==="module"?"block":"none";
   document.getElementById("sidebar").classList.remove("open");
+  syncSidebarActive(v);
   if(v==="instructor")renderInstructor();
 }
 function calcProgress(){

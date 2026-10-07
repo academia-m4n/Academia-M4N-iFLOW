@@ -33,6 +33,7 @@ button{cursor:pointer}
 .main-nav{padding:16px 13px;display:flex;flex-direction:column;gap:5px}
 .nav-item{display:flex;align-items:center;gap:11px;border:0;background:transparent;color:#c9d3d7;padding:11px 12px;border-radius:8px;text-align:left}
 .nav-item:hover,.nav-item.active{background:var(--nav2);color:#fff}.nav-icon{width:20px;text-align:center}
+.main-nav .nav-item[data-open-module].active{background:var(--nav2);color:#fff;font-weight:700;box-shadow:inset 4px 0 0 var(--green)}
 .sidebar-section{padding:7px 13px;overflow:auto}.sidebar-label{font-size:10px;letter-spacing:1.1px;color:#83959d;font-weight:700;padding:7px 12px}
 .module-stage-nav{display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;color:#aebbc1;padding:9px 10px;border-radius:7px;text-align:left;font-size:12px}
 .module-stage-nav:hover,.module-stage-nav.active{background:#2f4049;color:#fff}
