@@ -153,3 +153,7 @@ h1{font-size:42px;line-height:1.08;margin:0 0 14px;letter-spacing:-1.2px}h2{font
 .module-card-progress .home-progress-summary{margin-top:0}
 .module-card-progress .home-progress-percent{font-size:18px}
 @media(max-width:520px){.home-progress-summary{gap:6px}.home-progress-summary small{font-size:9px}.home-progress-percent{font-size:15px}}
+
+/* Feedback visual de guardado en Setup */
+.setup-save-feedback{margin-top:10px;font-size:12px;font-weight:700;color:var(--green-dark);line-height:1.4}
+.setup-save-feedback[hidden]{display:none}

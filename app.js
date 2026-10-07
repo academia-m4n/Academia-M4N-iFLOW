@@ -423,7 +423,7 @@ function setupHTML(m){
   }).join("");
   const note=currentModule==="inbound"?`<div class="note"><strong>Importante:</strong> el Recibo no debe existir al iniciar este ejercicio base. Lo crea el participante durante la práctica. El LPN también se registra después de generarlo.</div>`:"";
   return `<section class="module-stage" data-stage="setup">${stageHead(1,"ETAPA 3","Condiciones del ambiente","Cargá referencias del ejercicio. No uses datos productivos por defecto.")}
-    <div class="content-card"><h3>Setup requerido</h3><ul class="clean-list">${m.setup.map(x=>`<li>${x}</li>`).join("")}</ul>${note}<div class="config-grid">${fields}</div><button class="primary" data-save-setup>Guardar setup</button></div>${navBtns("concepts","guided")}</section>`;
+    <div class="content-card"><h3>Setup requerido</h3><ul class="clean-list">${m.setup.map(x=>`<li>${x}</li>`).join("")}</ul>${note}<div class="config-grid">${fields}</div><button class="primary" data-save-setup>Guardar setup</button><div class="setup-save-feedback" data-setup-save-feedback role="status" aria-live="polite" hidden>✓ Datos del ejercicio guardados correctamente.</div></div>${navBtns("concepts","guided")}</section>`;
 }
 function guidedHTML(m){
   if(currentModule==="orientation"){
@@ -932,10 +932,19 @@ function bindStageActions(){
   document.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>showStage(b.dataset.next));
   document.querySelectorAll("[data-prev]").forEach(b=>b.onclick=()=>showStage(b.dataset.prev));
   document.querySelectorAll("[data-milestone]").forEach(b=>b.onclick=()=>{state.milestones[b.dataset.milestone]=true;save();b.classList.add("done");b.textContent="Completado ✓";});
-  document.querySelector("[data-save-setup]")?.addEventListener("click",()=>{
+  const setupSaveButton=document.querySelector("[data-save-setup]");
+  const setupSaveFeedback=document.querySelector("[data-setup-save-feedback]");
+  const setSetupSavedVisual=(saved)=>{
+    if(!setupSaveButton)return;
+    setupSaveButton.textContent=saved?"Guardado ✓":"Guardar setup";
+    if(setupSaveFeedback)setupSaveFeedback.hidden=!saved;
+  };
+  setupSaveButton?.addEventListener("click",()=>{
     document.querySelectorAll("[data-config]").forEach(i=>{if(!i.disabled)state.config[i.dataset.config]=i.value.trim();});
     state.milestones.setup=true;save();
+    setSetupSavedVisual(true);
   });
+  document.querySelectorAll("[data-config]:not(:disabled)").forEach(i=>i.addEventListener("input",()=>setSetupSavedVisual(false)));
   document.querySelectorAll("[data-generated-config]").forEach(i=>i.addEventListener("input",e=>{state.config[e.target.dataset.generatedConfig]=e.target.value.trim();save();}));
   document.querySelectorAll("[data-task-complete]").forEach(i=>i.addEventListener("change",e=>{state.tasks[e.target.dataset.taskComplete]=e.target.checked;updateInboundGuided();save();}));
   document.querySelectorAll("[data-hint]").forEach(b=>b.onclick=()=>{
@@ -1019,6 +1028,13 @@ function checkQuiz(id){
 function syncInputs(){
   document.querySelectorAll("[data-config]").forEach(i=>i.value=state.config[i.dataset.config]||"");
   document.querySelectorAll("[data-generated-config]").forEach(i=>i.value=state.config[i.dataset.generatedConfig]||"");
+  const setupSaveButton=document.querySelector("[data-save-setup]");
+  const setupSaveFeedback=document.querySelector("[data-setup-save-feedback]");
+  if(setupSaveButton){
+    const setupSaved=!!state.milestones.setup;
+    setupSaveButton.textContent=setupSaved?"Guardado ✓":"Guardar setup";
+    if(setupSaveFeedback)setupSaveFeedback.hidden=!setupSaved;
+  }
   document.querySelectorAll("[data-task-complete]").forEach(i=>i.checked=!!state.tasks[i.dataset.taskComplete]);
   document.querySelectorAll("[data-milestone]").forEach(b=>{if(state.milestones[b.dataset.milestone]){b.classList.add("done");b.textContent="Completado ✓";}});
   if(currentModule==="orientation"&&state.milestones.scenario){
