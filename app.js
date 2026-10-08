@@ -150,6 +150,7 @@ function showView(v){
   document.getElementById("moduleNavWrap").style.display=v==="module"?"block":"none";
   document.getElementById("sidebar").classList.remove("open");
   syncSidebarActive(v);
+  if(v==="home")renderHome();
   if(v==="instructor")renderInstructor();
 }
 function calcProgress(){
@@ -286,7 +287,7 @@ function renderModule(){
   const nav=m.stages.map(s=>`<button class="stage-pill" data-stage-nav="${s.id}">${s.title}</button>`).join("");
   document.getElementById("moduleNav").innerHTML=m.stages.map(s=>`<button class="nav-item" data-stage-nav="${s.id}">${s.title}</button>`).join("");
   document.getElementById("moduleRoot").innerHTML=`<div class="module-shell">${moduleHeader(m)}<div class="stage-nav">${nav}</div>${m.stages.map(s=>stageHTML(m,s.id)).join("")}</div>`;
-  document.getElementById("backHome").onclick=()=>{showView("home");renderHome();};
+  document.getElementById("backHome").onclick=()=>showView("home");
   document.querySelectorAll("[data-stage-nav]").forEach(b=>b.onclick=()=>showStage(b.dataset.stageNav));
   bindStageActions();
   syncInputs();
@@ -826,6 +827,21 @@ function challengeHTML(m){
     ${navBtns("scenario","close")}</section>`;
 }
 
+function pendingMilestonesHTML(){
+  if(calcProgress()>=100)return "";
+  const labels=[
+    ["context","Situación / Context"],
+    ["concepts","Conceptos"],
+    ["setup","Setup"],
+    ["guided","Práctica guiada"],
+    ["checkpoint","Checkpoint"],
+    ["scenario","Escenario / Semiguiado"]
+  ];
+  const pending=labels.filter(([id])=>!state.milestones[id]).map(([,label])=>label);
+  if(!state.challengeComplete)pending.push("Desafío");
+  return pending.length?`<div class="content-card pending-milestones" role="status"><h3>Todavía quedan etapas pendientes</h3><p>Todavía quedan etapas pendientes para completar este módulo:</p><ul class="clean-list">${pending.map(label=>`<li>${label}</li>`).join("")}</ul></div>`:"";
+}
+
 function closeHTML(m){
   let ideas="",occurred="";
   if(currentModule==="orientation"){
@@ -880,7 +896,7 @@ function closeHTML(m){
   return `<section class="module-stage" data-stage="close">${stageHead(3,"CIERRE DEL MÓDULO",m.title,"Revisá los criterios que deben quedar incorporados al finalizar el módulo.")}
     <div class="content-card split"><div><h3>Lo importante</h3><ul class="clean-list">${ideas}</ul></div><div><h3>Errores a evitar</h3><ul class="clean-list">${m.critical.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
     <div class="result-banner"><span>QUÉ OCURRIÓ EN M4N</span><strong>${occurred}</strong></div>${ref(m)}
-    <div class="summary-card"><h3 id="completionText">${status()}</h3><p>La clasificación de aprobación completa queda disponible en Vista Instructor.</p></div>${navBtns("challenge",null)}</section>`;
+    ${pendingMilestonesHTML()}<div class="summary-card"><h3 id="completionText">${status()}</h3><p>La clasificación de aprobación completa queda disponible en Vista Instructor.</p></div>${navBtns("challenge",null)}</section>`;
 }
 
 function navBtns(prev,next){
