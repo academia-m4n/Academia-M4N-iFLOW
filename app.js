@@ -987,6 +987,7 @@ function bindStageActions(){
   });
   document.querySelector("[data-scenario]")?.addEventListener("click",()=>{
     const id=currentModule==="orientation"?"q_scenario":
+             currentModule==="masterdata"?"q_scenario":
              currentModule==="inbound"?"alternative_receipt_status":
              currentModule==="putaway"?"put_scenario":
              currentModule==="inventory"?"inv_scenario":
